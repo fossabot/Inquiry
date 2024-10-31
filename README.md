@@ -4,7 +4,7 @@ Inquiry, belirtilen alan adları üzerinde çeşitli keşif görevleri gerçekle
 
 ## Özellikler
 
-- **Subdomain Adı Keşfi**: Hedef alan adıyla ilişkili alt alan adlarını bulmak için Subfinder kullanır.
+- **Subdomain Keşfi**: Hedef alan adıyla ilişkili alt alan adlarını bulmak için Subfinder kullanır.
 - **Shodan Araması**: Hedef alan adı hakkında Shodan'dan DNS kayıtları ve diğer ilgili bilgileri alır.
 - **WordPress Tarama**: Hedef site üzerindeki yüklü WordPress eklentilerini tanımlar ve kaydeder.
 - **Nmap Zafiyet Taraması**: Hedef alan adı ile ilgili zafiyetleri kontrol etmek için Nmap çalıştırır.
