@@ -28,7 +28,6 @@ pip3 install -r requirements.txt
 ```
 
 ## Kullanım Örnekleri
-- **Tekli Kullanım Örneği**:
 ```bash
 python3 main.py -u example.com --subfinder
 ```
