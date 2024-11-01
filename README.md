@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/sahici/Inquiry"><img src="https://raw.githubusercontent.com/sahici/sahici/refs/heads/main/inquiry.jpg" alt="Inquiry></a>
+  <a href="https://github.com/sahici/Inquiry"><img  height="500" src="https://raw.githubusercontent.com/sahici/sahici/refs/heads/main/inquiry.jpg" alt="Inquiry></a>
   <br>
   Arjun
   <br>
