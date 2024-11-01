@@ -1,4 +1,4 @@
-# Inquiry v1.0
+# Inquiry v1.0 main v1.1
 # Signature: Yasin Yaşar
 
 import argparse
@@ -19,12 +19,14 @@ def display_ascii_art():
     art_directory = os.path.join(os.path.dirname(__file__), "modules", "ascii-art")
     
     try:
+        # Get a list of all ASCII art files in the directory
         art_files = [f for f in os.listdir(art_directory) if f.endswith('.txt')]
         
         if not art_files:
             print("ASCII art dosyası bulunamadı.")
             return
         
+        # Select a random ASCII art file
         selected_art_file = random.choice(art_files)
         art_file_path = os.path.join(art_directory, selected_art_file)
         
