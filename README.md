@@ -1,10 +1,8 @@
 <h1 align="center">
-  <br>
-  <a href="https://github.com/sahici/Inquiry"><img width="400px"  height="400" src="https://raw.githubusercontent.com/sahici/sahici/refs/heads/main/inquiry.jpg" alt="Inquiry></a>
+  <a href="https://github.com/sahici/Inquiry"><img src="https://raw.githubusercontent.com/sahici/sahici/refs/heads/main/inquiry.jpg" alt="Inquiry" width="400" height="400"></a>
   <br>
   Inquiry
   <br>
-  </br>
 </h1>
 
 Inquiry, belirtilen alan adları üzerinde çeşitli keşif görevleri gerçekleştirmek için tasarlanmış çok amaçlı bir siber güvenlik aracıdır. Alt alan adı keşfi, zafiyet taraması, WordPress eklenti/version belirleme gibi çeşitli sıfırdan yazılmış modüller kullanıyor.
