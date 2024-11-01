@@ -1,10 +1,10 @@
-# Inquiry v1.0 main v1.1
+# Inquiry v1.0
 # Signature: Yasin Yaşar
 
 import argparse
 import os
 import random
-from modules.shodanCrawl import ShodanCrawler
+from modules.dnsCrawl import DNSChecker
 import modules.WPCrawl as WPCrawl
 import modules.nmapDracula as nmapDracula
 import modules.subfinder as subfinder
@@ -14,7 +14,7 @@ from colorama import init
 def process_domain_from_file(file_path):
     with open(file_path, 'r') as file:
         return [line.strip() for line in file.readlines()]
-    
+
 def display_ascii_art():
     art_directory = os.path.join(os.path.dirname(__file__), "modules", "ascii-art")
     
@@ -37,11 +37,16 @@ def display_ascii_art():
     except Exception as e:
         print(f"ASCII art yüklenemedi: {str(e)}")
 
+def handle_dns_records(url):
+    print("\n=== DNS Kayıt Kontrolü Başlatılıyor ===")
+    checker = DNSChecker()
+    results = checker.check_all(url)
+    print(checker.format_results(results))
 
 def main():
     parser = argparse.ArgumentParser(description="Dracula TOOL")
     parser.add_argument("--nmap-vulners", dest="nmap_vulners", action='store_true', help="Hedef hakkında vuln ile ilgili bilgi almak için.")
-    parser.add_argument("--shodan-domain", dest="shodan_domain", action='store_true', help="Hedef hakkında Shodan'dan DNS kayıtlarını alır.")
+    parser.add_argument("--dns-records", dest="dns_records", action='store_true', help="Hedef hakkında DNS kayıtlarını alır.")
     parser.add_argument("--wordpress-crawl", dest="wordpress_crawl", action='store_true', help="Hedef WordPress Pluginglerini bulur ve kayıt altına alır.")
     parser.add_argument("--subfinder", dest="subfinder_domain", action='store_true', help="Subdomain tespiti yapar.")
     parser.add_argument("-u", "--url", help="Hedef alan adı.", required=True)
@@ -56,18 +61,15 @@ def main():
                 subfinder.find_subdomains(args.url)
                 print("--- Subfinder İşlemi Bitti ---")
 
-
-            ### SHODAN DOMAIN ###
-            if args.shodan_domain:
-                crawler = ShodanCrawler()
-                crawler.handleShodanDomains([args.url])
-                print("--- Shodan Domain İşlemi Bitti ---")
+            ### DNSCRAWL ###
+            if args.dns_records:
+                handle_dns_records(args.url)
+                print("--- DNSCRAWL İşlemi Bitti ---")
 
             ### WPCRAWL ###
             if args.wordpress_crawl:
                 WPCrawl.run_wordpress_crawl([args.url])
                 print("--- WordPress Crawl İşlemi Bitti ---")
-
 
             ### NMAP VULNERS SCRIPT ###
             if args.nmap_vulners:
