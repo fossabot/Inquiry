@@ -19,14 +19,12 @@ def display_ascii_art():
     art_directory = os.path.join(os.path.dirname(__file__), "modules", "ascii-art")
     
     try:
-        # Get a list of all ASCII art files in the directory
         art_files = [f for f in os.listdir(art_directory) if f.endswith('.txt')]
         
         if not art_files:
             print("ASCII art dosyası bulunamadı.")
             return
         
-        # Select a random ASCII art file
         selected_art_file = random.choice(art_files)
         art_file_path = os.path.join(art_directory, selected_art_file)
         
@@ -36,12 +34,6 @@ def display_ascii_art():
 
     except Exception as e:
         print(f"ASCII art yüklenemedi: {str(e)}")
-
-def handle_dns_records(url):
-    print("\n=== DNS Kayıt Kontrolü Başlatılıyor ===")
-    checker = DNSChecker()
-    results = checker.check_all(url)
-    print(checker.format_results(results))
 
 def main():
     parser = argparse.ArgumentParser(description="Dracula TOOL")
@@ -63,7 +55,10 @@ def main():
 
             ### DNSCRAWL ###
             if args.dns_records:
-                handle_dns_records(args.url)
+                print("\n=== DNS Kayıt Kontrolü Başlatılıyor ===")
+                checker = DNSChecker()
+                results = checker.check_all(args.url)
+                print(checker.format_results(results))
                 print("--- DNSCRAWL İşlemi Bitti ---")
 
             ### WPCRAWL ###
