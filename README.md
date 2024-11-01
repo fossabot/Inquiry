@@ -3,7 +3,7 @@
 Inquiry, belirtilen alan adları üzerinde çeşitli keşif görevleri gerçekleştirmek için tasarlanmış çok amaçlı bir siber güvenlik aracıdır. Alt alan adı keşfi, zafiyet taraması, WordPress eklenti/version belirleme gibi çeşitli sıfırdan yazılmış modüller kullanıyor.
 ### 
 
-<img src="https://raw.githubusercontent.com/sahici/sahici/refs/heads/main/inquiry.jpg"  />
+<img height="200" src="https://raw.githubusercontent.com/sahici/sahici/refs/heads/main/inquiry.jpg"  />
 
 ## Özellikler
 
