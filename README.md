@@ -7,7 +7,7 @@
 
 <h4 align="center">Red Team Tools</h4>
 
-Inquiry, belirtilen alan adları üzerinde çeşitli keşif görevleri gerçekleştirmek için tasarlanmış çok amaçlı bir siber güvenlik aracıdır. Alt alan adı keşfi, zafiyet taraması, WordPress eklenti/version belirleme gibi çeşitli sıfırdan yazılmış modüller kullanıyor.
+Inquiry, belirtilen alan adları üzerinde çeşitli keşif görevleri gerçekleştirmek için tasarlanmış çok amaçlı bir siber güvenlik aracıdır. Subdomain keşfi, zafiyet taraması, WordPress eklenti/version belirleme gibi çeşitli sıfırdan yazılmış modüller kullanıyor.
 
 ## Özellikler
 
@@ -21,9 +21,9 @@ Inquiry, belirtilen alan adları üzerinde çeşitli keşif görevleri gerçekle
 - **Programı kurmak için aşağıdaki komutları çalıştırın:**
 
 ```bash
-sudo snap install nmap
 git clone https://github.com/sahici/Inquiry.git
 cd Inquiry
+sudo snap install nmap
 pip3 install -r requirements.txt
 ```
 
@@ -32,8 +32,6 @@ pip3 install -r requirements.txt
 ```bash
 python3 main.py -u example.com --subfinder
 ```
-
-- **Çoklu Kullanım Örneği**:
 ```bash
 python3 main.py -u example.com --subfinder --shodan-domain
 ```
