@@ -71,24 +71,20 @@ def main():
             ### SUBFINDER ###
             if args.subfinder_domain:
                 subfinder.find_subdomains(url)
-                print(ascii_art + "--- Subfinder İşlemi Bitti ---" + reset_color)
 
             ### DNSCRAWL ###
             if args.dns_records:
                 checker = DNSChecker()
                 results = checker.check_all(url)
                 print(checker.format_results(results))
-                print(ascii_art + "--- DNSCRAWL İşlemi Bitti ---" + reset_color)
 
             ### WPCRAWL ###
             if args.wordpress_crawl:
                 WPCrawl.run_wordpress_crawl([url])
-                print(ascii_art + "--- WordPress Crawl İşlemi Bitti ---" + reset_color)
 
             ### NMAP VULNERS SCRIPT ###
             if args.nmap_vulners:
                 nmapDracula.run_nmap_vulners([url])
-                print(ascii_art + "--- Nmap Vulners İşlemi Bitti ---" + reset_color)
 
     except KeyboardInterrupt:
         print("\nProgram durduruldu. Çıkılıyor...")
