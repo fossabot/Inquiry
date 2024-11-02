@@ -4,8 +4,8 @@
 import socket
 import concurrent.futures
 from typing import Dict, Any, List
-from modules.color import not_found, reset_color, yellow_wpcrawl
 import dns.resolver
+from modules.color import not_found, reset_color, yellow_wpcrawl
 
 class DNSChecker:
     def __init__(self, timeout: int = 3):
@@ -27,9 +27,8 @@ class DNSChecker:
             else:
                 return [str(answer) for answer in answers]
                 
-        except Exception as e:
-            print(f"{not_found} Hata ({record_type}): {str(e)} {reset_color}")
-            return []
+        except Exception:
+            return []  # Hataları göz ardı et
 
     def check_all(self, domain: str) -> Dict[str, Any]:
         record_types = ['A', 'CNAME', 'MX', 'TXT', 'NS']
@@ -48,34 +47,34 @@ class DNSChecker:
         return results
 
     def format_results(self, results: Dict[str, Any]) -> str:
-        output = [f"{yellow_wpcrawl} \n[+] DNS Kayıtları: {results['domain']}\n {reset_color}"]
+        output = [f"{yellow_wpcrawl}\n[+] DNS Kayıtları: {results['domain']}\n{reset_color}"]
         
         if results['A']:
-            output.append(f"{yellow_wpcrawl}[+] A Kayıtları: {reset_color}")
+            output.append(f"{yellow_wpcrawl}[+] A Kayıtları:{reset_color}")
             output.extend(f"{yellow_wpcrawl} └─ {ip} {reset_color}" for ip in results['A'])
             
         if results['CNAME']:
-            output.append(f"{yellow_wpcrawl} \n[+] CNAME Kayıtları: {reset_color}")
+            output.append(f"{yellow_wpcrawl}\n[+] CNAME Kayıtları:{reset_color}")
             output.extend(f"{yellow_wpcrawl} └─ {cname} {reset_color}" for cname in results['CNAME'])
             
         if results['MX']:
-            output.append(f"{yellow_wpcrawl} \n[+] MX Kayıtları: {reset_color}")
+            output.append(f"{yellow_wpcrawl}\n[+] MX Kayıtları:{reset_color}")
             output.extend(f"{yellow_wpcrawl} └─ {host} (öncelik: {pref}) {reset_color}" 
                          for pref, host in sorted(results['MX']))
             
         if results['TXT']:
-            output.append(f"{yellow_wpcrawl} \n[+] TXT Kayıtları: {reset_color}")
+            output.append(f"{yellow_wpcrawl}\n[+] TXT Kayıtları:{reset_color}")
             output.extend(f"{yellow_wpcrawl} └─ {txt} {reset_color}" for txt in results['TXT'])
             
         if results['NS']:
-            output.append(f"{yellow_wpcrawl} \n[+] NS Kayıtları: {reset_color}")
+            output.append(f"{yellow_wpcrawl}\n[+] NS Kayıtları:{reset_color}")
             output.extend(f"{yellow_wpcrawl} └─ {ns} {reset_color}" for ns in results['NS'])
             
         return '\n'.join(output)
 
 def handle_dns_records(args):
     if args.dns_records:
-        print(f"{not_found} \n=== DNS Kayıt Kontrolü Başlatılıyor === {reset_color}")
+        print(f"{not_found}\n=== DNS Kayıt Kontrolü Başlatılıyor ==={reset_color}")
         checker = DNSChecker()
         results = checker.check_all(args.url)
         print(checker.format_results(results))
