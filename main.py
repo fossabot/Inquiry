@@ -56,6 +56,9 @@ def main():
             urls.append(args.url)
 
         if args.file:
+            if not os.path.isfile(args.file):
+                print(ascii_art + "Belirtilen dosya bulunamadı veya geçersiz bir dosya yolu." + reset_color)
+                return
             urls.extend(process_domain_from_file(args.file))
 
         if not urls:
