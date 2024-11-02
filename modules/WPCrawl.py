@@ -10,20 +10,13 @@ from urllib.parse import urljoin
 import threading
 from modules.color import found, not_found, reset_color, yellow_wpcrawl
 
-
 def run_wordpress_crawl(targets):
-    stop_event = threading.Event()
-    animation_thread = threading.Thread(args=(stop_event,))
-    animation_thread.start()
-    
     threads = [threading.Thread(target=crawl_worker, args=(target,)) for target in targets]
     for t in threads:
         t.start()
     for t in threads:
         t.join()
     
-    stop_event.set()  # Animasyonu durdur
-    animation_thread.join()
     print(f"{yellow_wpcrawl} Tarama tamamlandı! {reset_color}")
 
 def crawl_worker(target_name):
@@ -49,6 +42,8 @@ def crawl_worker(target_name):
                 extract_and_save_info(file_info["url"], folder_path)
 
         sonuc(folder_path, status_codes_data)
+    except requests.exceptions.SSLError:
+        print_error_message(f"{not_found} Site Taraflı SSL Bağlantı Hatası: {target_name} {reset_color}")
     except Exception as e:
         print_error_message(f"{not_found} Crawl hatası: {e} {reset_color}")
 
