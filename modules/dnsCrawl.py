@@ -51,25 +51,25 @@ class DNSChecker:
         output = [f"{yellow_wpcrawl} \n[+] DNS Kayıtları: {results['domain']}\n {reset_color}"]
         
         if results['A']:
-            output.append(f"{yellow_wpcrawl} [+] A Kayıtları: {reset_color}")
-            output.extend(f"{yellow_wpcrawl}  └─ {ip} {reset_color}" for ip in results['A'])
+            output.append(f"{yellow_wpcrawl}[+] A Kayıtları: {reset_color}")
+            output.extend(f"{yellow_wpcrawl} └─ {ip} {reset_color}" for ip in results['A'])
             
         if results['CNAME']:
             output.append(f"{yellow_wpcrawl} \n[+] CNAME Kayıtları: {reset_color}")
-            output.extend(f"{yellow_wpcrawl}  └─ {cname} {reset_color}" for cname in results['CNAME'])
+            output.extend(f"{yellow_wpcrawl} └─ {cname} {reset_color}" for cname in results['CNAME'])
             
         if results['MX']:
             output.append(f"{yellow_wpcrawl} \n[+] MX Kayıtları: {reset_color}")
-            output.extend(f"{yellow_wpcrawl}  └─ {host} (öncelik: {pref}) {reset_color}" 
+            output.extend(f"{yellow_wpcrawl} └─ {host} (öncelik: {pref}) {reset_color}" 
                          for pref, host in sorted(results['MX']))
             
         if results['TXT']:
             output.append(f"{yellow_wpcrawl} \n[+] TXT Kayıtları: {reset_color}")
-            output.extend(f"{yellow_wpcrawl}  └─ {txt} {reset_color}" for txt in results['TXT'])
+            output.extend(f"{yellow_wpcrawl} └─ {txt} {reset_color}" for txt in results['TXT'])
             
         if results['NS']:
             output.append(f"{yellow_wpcrawl} \n[+] NS Kayıtları: {reset_color}")
-            output.extend(f"{yellow_wpcrawl}  └─ {ns} {reset_color}" for ns in results['NS'])
+            output.extend(f"{yellow_wpcrawl} └─ {ns} {reset_color}" for ns in results['NS'])
             
         return '\n'.join(output)
 
