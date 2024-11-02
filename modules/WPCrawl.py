@@ -5,22 +5,15 @@ import os
 import json
 import re
 import requests
-import time
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import threading
 from modules.color import found, not_found, reset_color, yellow_wpcrawl
 
-def loading_animation(stop_event):
-    print(f"{yellow_wpcrawl} Tarama devam ediyor {reset_color}", end='', flush=True)
-    while not stop_event.is_set():
-        time.sleep(1)
-        print('.', end='', flush=True)
-    print()  # Yeni satıra geç
 
 def run_wordpress_crawl(targets):
     stop_event = threading.Event()
-    animation_thread = threading.Thread(target=loading_animation, args=(stop_event,))
+    animation_thread = threading.Thread(args=(stop_event,))
     animation_thread.start()
     
     threads = [threading.Thread(target=crawl_worker, args=(target,)) for target in targets]
