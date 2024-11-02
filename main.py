@@ -19,12 +19,14 @@ def display_ascii_art():
     art_directory = os.path.join(os.path.dirname(__file__), "modules", "ascii-art")
     
     try:
+        # Get a list of all ASCII art files in the directory
         art_files = [f for f in os.listdir(art_directory) if f.endswith('.txt')]
         
         if not art_files:
             print("ASCII art dosyası bulunamadı.")
             return
         
+        # Select a random ASCII art file
         selected_art_file = random.choice(art_files)
         art_file_path = os.path.join(art_directory, selected_art_file)
         
@@ -37,44 +39,58 @@ def display_ascii_art():
 
 def main():
     parser = argparse.ArgumentParser(description="Dracula TOOL")
-    parser.add_argument("--nmap-vulners", dest="nmap_vulners", action='store_true', help="Hedef hakkında vuln ile ilgili bilgi almak için.")
+    parser.add_argument("--nmap-vulners", dest="nmap_vulners", action='store_true', help="Hedefe Nmap Vulners scripti kullanarak zafiyet testi yapar.")
     parser.add_argument("--dns-records", dest="dns_records", action='store_true', help="Hedef hakkında DNS kayıtlarını alır.")
     parser.add_argument("--wordpress-crawl", dest="wordpress_crawl", action='store_true', help="Hedef WordPress Pluginglerini bulur ve kayıt altına alır.")
     parser.add_argument("--subfinder", dest="subfinder_domain", action='store_true', help="Subdomain tespiti yapar.")
-    parser.add_argument("-u", "--url", help="Hedef alan adı.", required=True)
+    parser.add_argument("-u", "--url", help="Hedef alan adı.")
+    parser.add_argument("-f", "--file", help="Hedef alan adları içeren dosya yolu.")
 
     args = parser.parse_args()
 
     try:
         # Hedef alan adı kontrolü
+        urls = []
+        
         if args.url:
+            urls.append(args.url)
+
+        if args.file:
+            urls.extend(process_domain_from_file(args.file))
+
+        if not urls:
+            print(ascii_art + "Lütfen bir hedef alan adı veya dosya belirtin." + reset_color)
+            return
+
+        for url in urls:
+            print(f"\nİşlem yapılıyor: {url}")
+
             ### SUBFINDER ###
             if args.subfinder_domain:
-                subfinder.find_subdomains(args.url)
-                print("--- Subfinder İşlemi Bitti ---")
+                subfinder.find_subdomains(url)
+                print(ascii_art + "--- Subfinder İşlemi Bitti ---" + reset_color)
 
             ### DNSCRAWL ###
             if args.dns_records:
-                print("\n=== DNS Kayıt Kontrolü Başlatılıyor ===")
                 checker = DNSChecker()
-                results = checker.check_all(args.url)
+                results = checker.check_all(url)
                 print(checker.format_results(results))
-                print("--- DNSCRAWL İşlemi Bitti ---")
+                print(ascii_art + "--- DNSCRAWL İşlemi Bitti ---" + reset_color)
 
             ### WPCRAWL ###
             if args.wordpress_crawl:
-                WPCrawl.run_wordpress_crawl([args.url])
-                print("--- WordPress Crawl İşlemi Bitti ---")
+                WPCrawl.run_wordpress_crawl([url])
+                print(ascii_art + "--- WordPress Crawl İşlemi Bitti ---" + reset_color)
 
             ### NMAP VULNERS SCRIPT ###
             if args.nmap_vulners:
-                nmapDracula.run_nmap_vulners([args.url])
-                print("--- Nmap Vulners İşlemi Bitti ---")
+                nmapDracula.run_nmap_vulners([url])
+                print(ascii_art + "--- Nmap Vulners İşlemi Bitti ---" + reset_color)
 
     except KeyboardInterrupt:
         print("\nProgram durduruldu. Çıkılıyor...")
     except Exception as e:
-        print(f"Hata oluştu: {e}")
+        print(f"{ascii_art} Hata oluştu: {e} {reset_color}")
 
 if __name__ == "__main__":
     # Colorama'yı başlat
