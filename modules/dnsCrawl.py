@@ -47,7 +47,6 @@ class DNSChecker:
         return results
 
     def format_results(self, results: Dict[str, Any]) -> str:
-        """Sonuçları formatlar"""
         output = [f"\n[+] DNS Kayıtları: {results['domain']}\n"]
         
         if results['A']:
