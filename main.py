@@ -8,7 +8,7 @@ from modules.dnsCrawl import DNSChecker
 import modules.WPCrawl as WPCrawl
 import modules.nmapDracula as nmapDracula
 import modules.subfinder as subfinder
-from modules.color import ascii_art, reset_color
+from modules.color import ascii_art, reset_color, yellow_wpcrawl
 from colorama import init
 
 def process_domain_from_file(file_path):
@@ -66,7 +66,7 @@ def main():
             return
 
         for url in urls:
-            print(f"\nİşlem yapılıyor: {url}")
+            print(f"{yellow_wpcrawl} \nİşlem yapılıyor: {url} {reset_color}")
 
             ### SUBFINDER ###
             if args.subfinder_domain:
