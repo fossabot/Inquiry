@@ -123,7 +123,7 @@ def sonuc(folder_path, status_codes_data):
     try:
         plugins_json_filename = os.path.join(folder_path, "plugins.json")
         
-        output = []  # Collecting output messages
+        output = []
 
         if os.path.exists(plugins_json_filename):
             with open(plugins_json_filename, 'r') as plugins_file:
@@ -148,7 +148,6 @@ def sonuc(folder_path, status_codes_data):
                 if file_dict['status_code'] == 200:
                     output.append(f"{yellow_wpcrawl} └─ {file_dict['url']} - Status kodu: {file_dict['status_code']}{reset_color}")
 
-        # Print all collected output
         print("\n".join(output))
 
     except Exception as e:
