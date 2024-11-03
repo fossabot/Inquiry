@@ -32,7 +32,7 @@ pip3 install -r requirements.txt
 python3 main.py -u example.com --subfinder
 ```
 ```bash
-python3 main.py -u example.com --subfinder --shodan-domain
+python3 main.py -u example.com --subfinder --dns-records
 ```
 ## Süreklilik:
 
