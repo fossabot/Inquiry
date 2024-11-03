@@ -36,7 +36,7 @@ python3 main.py -u example.com --subfinder --dns-records
 ```
 ## Süreklilik:
 
-- Inquiry yazılımı sürekli olarak aktif bir şekilde geliştirilmeye devam ediyor. Mevcut modüller üzerinde düzenli güncellemeler yapılıyor ve yeni modüller için geliştirme çalışmaları çoktan başlamış durumda.
+- Inquiry yazılımı sürekli olarak aktif bir şekilde geliştirilmeye devam ediliyor. Mevcut modüller üzerinde düzenli güncellemeler yapılıyor ve yeni modüller için geliştirme çalışmaları çoktan başlamış durumda.
 
 ## Özel Teşekkürler:
 - **Bel ağrılarına katlanabildiği için kendime teşekkür ederim :D.**
