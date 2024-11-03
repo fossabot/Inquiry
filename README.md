@@ -34,13 +34,10 @@ python3 main.py -u example.com --subfinder
 ```bash
 python3 main.py -u example.com --subfinder --dns-records
 ```
-## Süreklilik:
+## Süreklilik
 
 - Inquiry yazılımı sürekli olarak aktif bir şekilde geliştirilmeye devam ediliyor. Mevcut modüller üzerinde düzenli güncellemeler yapılıyor ve yeni modüller için geliştirme çalışmaları çoktan başlamış durumda.
 
-## Özel Teşekkürler:
-- **Bel ağrılarına katlanabildiği için kendime teşekkür ederim :D.**
-
-- ## İletişim:
+- ## İletişim
 - Linkedin: https://www.linkedin.com/in/yasinyasarai/
 - İnstagram: https://www.instagram.com/yyasar.yasin/
