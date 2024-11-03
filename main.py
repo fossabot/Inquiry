@@ -39,13 +39,12 @@ def display_ascii_art():
 
 def main():
     parser = argparse.ArgumentParser(description="Dracula TOOL")
-    parser.add_argument("--nmap-vulners", dest="nmap_vulners", action='store_true', help="Hedefe Nmap Vulners scripti kullanarak zafiyet testi yapar.")
-    parser.add_argument("--dns-records", dest="dns_records", action='store_true', help="Hedef hakkında DNS kayıtlarını alır.")
-    parser.add_argument("--wordpress-crawl", dest="wordpress_crawl", action='store_true', help="Hedef WordPress Pluginglerini bulur ve kayıt altına alır.")
-    parser.add_argument("--subfinder", dest="subfinder_domain", action='store_true', help="Subdomain tespiti yapar.")
     parser.add_argument("-u", "--url", help="Hedef alan adı.")
     parser.add_argument("-f", "--file", help="Hedef alan adları içeren dosya yolu.")
-
+    parser.add_argument("--dns-records", dest="dns_records", action='store_true', help="Hedef hakkında DNS kayıtlarını alır.")
+    parser.add_argument("--subfinder", dest="subfinder_domain", action='store_true', help="Hedef Subdomain tespiti yapar.")
+    parser.add_argument("--wordpress-crawl", dest="wordpress_crawl", action='store_true', help="Hedef WordPress Pluginglerini bulur ve kayıt altına alır.")
+    parser.add_argument("--nmap-vulners", dest="nmap_vulners", action='store_true', help="Hedefe Nmap Vulners scripti kullanarak zafiyet testi yapar.")
     args = parser.parse_args()
 
     try:
