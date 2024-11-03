@@ -1,10 +1,10 @@
-# Inquiry v1.0 subfinder
+# Inquiry v1.0 subfinder v1.2
 # Signature: Yasin Yaşar
 
 import requests
 import json
 import threading
-from modules.color import found, not_found, yellow_wpcrawl, reset_color
+from modules.color import not_found, yellow_wpcrawl, reset_color
 
 def fetch_subdomain_status(common_name, results):
     try:
@@ -16,21 +16,19 @@ def fetch_subdomain_status(common_name, results):
         pass
 
 def find_subdomains(domain):
-    print(f"{yellow_wpcrawl} Subdomain tespiti başlatılıyor: {domain} {reset_color}")
+    print(f"{yellow_wpcrawl}[+] Subdomain tespiti başlatılıyor: {domain}{reset_color}")
     url = f"https://crt.sh/?q={domain}&output=json"
     
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Bu, 4xx ve 5xx hatalarını tetikler
-        print(f"{yellow_wpcrawl} CRT.sh'den yanıt alındı: {domain} {reset_color}")
+        response.raise_for_status()
+        print(f"{yellow_wpcrawl}[+] CRT.sh'den yanıt alındı: {domain}{reset_color}")
 
         subdomains = []
         seen_subdomains = set()
         json_data = json.loads(response.text)
 
-        results = []  # Alt alan adlarını saklamak için
-
-        # Alt alan adlarını işlemek için thread'ler oluşturur
+        results = []
         threads = []
 
         for item in json_data:
@@ -47,17 +45,26 @@ def find_subdomains(domain):
         if results:
             print_subdomains(results)
         else:
-            print("Alt etki alanı bulunamadı.")
+            print(f"{not_found}Alt etki alanı bulunamadı.{reset_color}")
 
     except requests.exceptions.HTTPError as e:
         if 500 <= response.status_code < 600:
-            print(f"{not_found} CRT.sh şuanda kullanılabilir değil, lütfen daha sonra tekrar deneyiniz. (Önerilen 5 dakika) {reset_color}")
+            print(f"{not_found}CRT.sh şuanda kullanılabilir değil, lütfen daha sonra tekrar deneyiniz. (Önerilen 5 dakika){reset_color}")
         else:
-            print(f"Hata: {e}")
+            print(f"{not_found}Hata: {e}{reset_color}")
     except requests.exceptions.RequestException as e:
-        print(f"{not_found} Bağlantı hatası: {e} {reset_color}")
+        print(f"{not_found}Bağlantı hatası: {e}{reset_color}")
 
 def print_subdomains(subdomains):
-    print(f"{found} \nEkrana Yazdırılan Alt Etki Alanları: {reset_color}")
-    for entry in subdomains:
-        print(f"{found} {entry['subdomain']} ({entry['status_code']}) {reset_color}")
+    print(f"{yellow_wpcrawl}\n[+] Bulunan Alt Etki Alanları:{reset_color}")
+    
+    for i, entry in enumerate(subdomains):
+        if i == len(subdomains) - 1:
+            # Son alt alan adı için
+            print(f"{yellow_wpcrawl} └─ Alt Alan Adı: {entry['subdomain']}{reset_color}")
+            print(f"{yellow_wpcrawl}    Durum Kodu: {entry['status_code']}{reset_color}")
+        else:
+            # Diğer alt alan adları için
+            print(f"{yellow_wpcrawl} └─ Alt Alan Adı: {entry['subdomain']}{reset_color}")
+            print(f"{yellow_wpcrawl} |   Durum Kodu: {entry['status_code']}{reset_color}")
+            print(f"{yellow_wpcrawl} |{reset_color}")
