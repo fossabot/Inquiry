@@ -1,4 +1,4 @@
-# Inquiry v1.0 WPCrawl v1.1
+# Inquiry v1.0 WPCrawl v1.2
 # Signature: Yasin Yaşar
 
 import os
@@ -123,23 +123,37 @@ def sonuc(folder_path, status_codes_data):
     try:
         plugins_json_filename = os.path.join(folder_path, "plugins.json")
         
+        output = []  # Collecting output messages
+
         if os.path.exists(plugins_json_filename):
             with open(plugins_json_filename, 'r') as plugins_file:
                 plugins_data = json.load(plugins_file)
                 
-                print(f"{yellow_wpcrawl}Plugins.json içeriği:{reset_color}")
-                for plugin in plugins_data:
-                    print(f"{yellow_wpcrawl}Eklenti Adı: {plugin.get('plugin_name', 'Bilinmeyen')}\n"
-                          f"Versiyon: {plugin.get('version', 'Bilinmeyen')}\n{reset_color}")
-        else:
-            print(f"{not_found}plugins.json dosyası bulunamadı.{reset_color}")
+                output.append(f"{yellow_wpcrawl}\n[+] Plugins.json içeriği:{reset_color}")
+                for i, plugin in enumerate(plugins_data):
+                    output.append(f"{yellow_wpcrawl} └─ Eklenti Adı: {plugin.get('plugin_name', 'Bilinmeyen')}{reset_color}")
+                    # Son eklenti için "|" işareti olmadan versiyon bilgisini ekle
+                    if i == len(plugins_data) - 1:
+                        output.append(f"{yellow_wpcrawl}    Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
+                    else:
+                        output.append(f"{yellow_wpcrawl} |   Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
+                        output.append(f"{yellow_wpcrawl} |{reset_color}")  # Sadece son eklenti değilse ayraç satırı ekle
 
-        for file_dict in status_codes_data:
-            if file_dict['status_code'] == 200:
-                print(f"{found}{file_dict['url']} - Status kodu: {file_dict['status_code']}{reset_color}")
+        else:
+            output.append(f"{not_found}plugins.json dosyası bulunamadı.{reset_color}")
+
+        if status_codes_data:
+            output.append(f"{yellow_wpcrawl}\n[+] Eklenti Status Kodları:{reset_color}")
+            for file_dict in status_codes_data:
+                if file_dict['status_code'] == 200:
+                    output.append(f"{yellow_wpcrawl} └─ {file_dict['url']} - Status kodu: {file_dict['status_code']}{reset_color}")
+
+        # Print all collected output
+        print("\n".join(output))
 
     except Exception as e:
         print_error_message(f"{not_found} Sonuç işleme hatası: {e} {reset_color}")
+
 
 def print_error_message(message):
     print(f"{not_found}Hata: {message}{reset_color}")
