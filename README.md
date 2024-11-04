@@ -28,12 +28,10 @@ pip3 install -r requirements.txt
 ```
 
 ## Kullanım Örnekleri
-```bash
-python3 main.py -u example.com --subfinder
-```
-```bash
-python3 main.py -u example.com --subfinder --dns-records
-```
+[![asciicast](https://asciinema.org/a/687210.svg)](https://asciinema.org/a/687210)
+
+[![asciicast](https://asciinema.org/a/687212.svg)](https://asciinema.org/a/687212)
+
 ## Süreklilik
 
 - Inquiry yazılımı sürekli olarak aktif bir şekilde geliştirilmeye devam ediliyor. Mevcut modüller üzerinde düzenli güncellemeler yapılıyor ve yeni modüller için geliştirme çalışmaları çoktan başlamış durumda.
