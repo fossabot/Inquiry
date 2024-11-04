@@ -28,9 +28,13 @@ pip3 install -r requirements.txt
 ```
 
 ## Kullanım Örnekleri
-[![asciicast](https://asciinema.org/a/687210.svg)](https://asciinema.org/a/687210)
+<p align="center">
+  <img src="https://github.com/sahici/Inquiry/blob/main/usage-gif/dns_records.gif">
+</p>
 
-[![asciicast](https://asciinema.org/a/687212.svg)](https://asciinema.org/a/687212)
+<p align="center">
+  <img src="https://github.com/sahici/Inquiry/blob/main/usage-gif/wordpress_crawl.gif">
+</p>
 
 ## Süreklilik
 
