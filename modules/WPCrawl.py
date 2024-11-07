@@ -1,4 +1,4 @@
-# Inquiry v1.0 WPCrawl v1.2
+# Inquiry v1.0 WPCrawl v1.4
 # Signature: Yasin Yaşar
 
 import os
@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import threading
-from modules.color import found, not_found, reset_color, yellow_wpcrawl
+from modules.color import not_found, reset_color, yellow_wpcrawl
 
 def run_wordpress_crawl(targets):
     threads = [threading.Thread(target=crawl_worker, args=(target,)) for target in targets]
@@ -18,6 +18,22 @@ def run_wordpress_crawl(targets):
         t.join()
     
     print(f"{yellow_wpcrawl} Tarama tamamlandı! {reset_color}")
+    
+def get_wordpress_users(site_url):
+    try:
+        # WordPress API endpoint'ini oluştur
+        api_url = f"{site_url}/wp-json/wp/v2/users"
+        response = requests.get(api_url)
+        
+        if response.status_code == 200:
+            users_data = response.json()
+            # Sadece name bilgilerini al
+            user_names = [user.get('name') for user in users_data if user.get('name')]
+            return user_names
+        return []
+    except Exception as e:
+        print_error_message(f"{not_found} Kullanıcı bilgileri alınamadı: {e} {reset_color}")
+        return []
 
 def crawl_worker(target_name):
     try:
@@ -29,11 +45,19 @@ def crawl_worker(target_name):
             print(f"{not_found}Site {target_name} bir WordPress sitesi değil.{reset_color}")
             return
 
+        # Kullanıcı bilgilerini al
+        user_names = get_wordpress_users(site_url)
+        
         optimized_links = optimize_plugin_links(soup, site_url)
         folder_path = prepare_folder(target_name)
 
-        cleaned_paths = save_cleaned_paths(optimized_links, target_name)
+        # Kullanıcı bilgilerini kaydet
+        if user_names:
+            users_json_path = os.path.join(folder_path, "users.json")
+            with open(users_json_path, 'w') as f:
+                json.dump({"users": user_names}, f, indent=4)
 
+        cleaned_paths = save_cleaned_paths(optimized_links, target_name)
         status_codes_data = check_and_save_status_codes(cleaned_paths, '/readme.txt', '/changelog.md')
 
         for file_info in status_codes_data:
@@ -121,23 +145,32 @@ def check_and_save_status_codes(cleaned_paths, *file_extensions):
 
 def sonuc(folder_path, status_codes_data):
     try:
+        output = []
+        
+        # Kullanıcı bilgilerini göster
+        users_json_filename = os.path.join(folder_path, "users.json")
+        if os.path.exists(users_json_filename):
+            with open(users_json_filename, 'r') as users_file:
+                users_data = json.load(users_file)
+                output.append(f"{yellow_wpcrawl}\n[+] WordPress Kullanıcıları:{reset_color}")
+                for user_name in users_data.get('users', []):
+                    output.append(f"{yellow_wpcrawl} └─ {user_name}{reset_color}")
+                output.append("")  # Boş satır ekle
+
         plugins_json_filename = os.path.join(folder_path, "plugins.json")
         
-        output = []
-
         if os.path.exists(plugins_json_filename):
             with open(plugins_json_filename, 'r') as plugins_file:
                 plugins_data = json.load(plugins_file)
                 
-                output.append(f"{yellow_wpcrawl}\n[+] Plugins.json içeriği:{reset_color}")
+                output.append(f"{yellow_wpcrawl}[+] Plugins.json içeriği:{reset_color}")
                 for i, plugin in enumerate(plugins_data):
                     output.append(f"{yellow_wpcrawl} └─ Eklenti Adı: {plugin.get('plugin_name', 'Bilinmeyen')}{reset_color}")
-                    # Son eklenti için "|" işareti olmadan versiyon bilgisini ekle
                     if i == len(plugins_data) - 1:
                         output.append(f"{yellow_wpcrawl}    Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
                     else:
                         output.append(f"{yellow_wpcrawl} |   Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
-                        output.append(f"{yellow_wpcrawl} |{reset_color}")  # Sadece son eklenti değilse ayraç satırı ekle
+                        output.append(f"{yellow_wpcrawl} |{reset_color}")
 
         else:
             output.append(f"{not_found}plugins.json dosyası bulunamadı.{reset_color}")
@@ -152,7 +185,6 @@ def sonuc(folder_path, status_codes_data):
 
     except Exception as e:
         print_error_message(f"{not_found} Sonuç işleme hatası: {e} {reset_color}")
-
 
 def print_error_message(message):
     print(f"{not_found}Hata: {message}{reset_color}")
