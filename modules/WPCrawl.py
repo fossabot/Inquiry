@@ -21,7 +21,6 @@ def run_wordpress_crawl(targets):
     
 def get_wordpress_users(site_url):
     try:
-        # WordPress API endpoint'ini oluştur
         api_url = f"{site_url}/wp-json/wp/v2/users"
         response = requests.get(api_url)
         
