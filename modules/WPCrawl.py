@@ -1,4 +1,4 @@
-# Inquiry v1.0 WPCrawl v1.4
+# Inquiry v1.0 WPCrawl v1.5
 # Signature: Yasin Yaşar
 
 import os
@@ -50,11 +50,17 @@ def crawl_worker(target_name):
         optimized_links = optimize_plugin_links(soup, site_url)
         folder_path = prepare_folder(target_name)
 
-        # Kullanıcı bilgilerini kaydet
+        # Verileri tek bir JSON dosyasına kaydet
+        wordpress_data = {
+            "site_url": site_url,
+            "users": user_names,
+            "plugins": [],
+            "status_codes": []
+        }
+
+        # Kullanıcı bilgilerini JSON'a ekle
         if user_names:
-            users_json_path = os.path.join(folder_path, "users.json")
-            with open(users_json_path, 'w') as f:
-                json.dump({"users": user_names}, f, indent=4)
+            wordpress_data["users"] = user_names
 
         cleaned_paths = save_cleaned_paths(optimized_links, target_name)
         status_codes_data = check_and_save_status_codes(cleaned_paths, '/readme.txt', '/changelog.md')
@@ -62,15 +68,19 @@ def crawl_worker(target_name):
         for file_info in status_codes_data:
             if file_info["status_code"] == 200:
                 file_type = "readme.txt" if "readme.txt" in file_info["url"] else "changelog.md"
-                extract_and_save_info(file_info["url"], folder_path)
+                extract_and_save_info(file_info["url"], folder_path, wordpress_data)
 
-        sonuc(folder_path, status_codes_data)
+        # Veriyi dosyaya kaydet
+        save_results_to_file(wordpress_data, folder_path)
+
+        sonuc(folder_path, wordpress_data)
+        
     except requests.exceptions.SSLError:
         print_error_message(f"{not_found} Site Taraflı SSL Bağlantı Hatası: {target_name} {reset_color}")
     except Exception as e:
         print_error_message(f"{not_found} Crawl hatası: {e} {reset_color}")
 
-def extract_and_save_info(file_url, folder_path):
+def extract_and_save_info(file_url, folder_path, wordpress_data):
     try:
         response = requests.get(file_url)
         if response.status_code == 200:
@@ -83,18 +93,8 @@ def extract_and_save_info(file_url, folder_path):
                     'version': stable_tag.group(1).strip()
                 }
                 
-                json_filename = os.path.join(folder_path, "plugins.json")
-                existing_data = json.load(open(json_filename, 'r')) if os.path.exists(json_filename) else []
-                
-                existing_entry = next((entry for entry in existing_data if entry['plugin_name'] == plugin_info['plugin_name']), None)
-                
-                if not existing_entry or existing_entry['version'] != plugin_info['version']:
-                    if existing_entry:
-                        existing_data.remove(existing_entry)
-                    existing_data.append(plugin_info)
-                    
-                    with open(json_filename, 'w') as json_file:
-                        json.dump(existing_data, json_file, indent=4)
+                # Plugins JSON listesine ekle
+                wordpress_data['plugins'].append(plugin_info)
     except Exception as e:
         print_error_message(f"{not_found} Bilgi çıkarma hatası: {e} {reset_color}")
 
@@ -142,41 +142,38 @@ def check_and_save_status_codes(cleaned_paths, *file_extensions):
     except Exception as e:
         print_error_message(f"{not_found} Status kodu hatası: {e} {reset_color}")
 
-def sonuc(folder_path, status_codes_data):
+def save_results_to_file(wordpress_data, folder_path):
+    results_filename = os.path.join(folder_path, "wordpress_results.json")
+    try:
+        with open(results_filename, 'w') as f:
+            json.dump(wordpress_data, f, indent=4)
+    except Exception as e:
+        print_error_message(f"{not_found} JSON dosyasına yazma hatası: {e} {reset_color}")
+
+def sonuc(folder_path, wordpress_data):
     try:
         output = []
         
         # Kullanıcı bilgilerini göster
-        users_json_filename = os.path.join(folder_path, "users.json")
-        if os.path.exists(users_json_filename):
-            with open(users_json_filename, 'r') as users_file:
-                users_data = json.load(users_file)
-                output.append(f"{yellow_wpcrawl}\n[+] WordPress Kullanıcıları:{reset_color}")
-                for user_name in users_data.get('users', []):
-                    output.append(f"{yellow_wpcrawl} └─ {user_name}{reset_color}")
-                output.append("")  # Boş satır ekle
+        if wordpress_data.get('users'):
+            output.append(f"{yellow_wpcrawl}\n[+] WordPress Kullanıcıları:{reset_color}")
+            for user_name in wordpress_data.get('users', []):
+                output.append(f"{yellow_wpcrawl} └─ {user_name}{reset_color}")
+            output.append("")  # Boş satır ekle
 
-        plugins_json_filename = os.path.join(folder_path, "plugins.json")
-        
-        if os.path.exists(plugins_json_filename):
-            with open(plugins_json_filename, 'r') as plugins_file:
-                plugins_data = json.load(plugins_file)
-                
-                output.append(f"{yellow_wpcrawl}[+] Plugins.json içeriği:{reset_color}")
-                for i, plugin in enumerate(plugins_data):
-                    output.append(f"{yellow_wpcrawl} └─ Eklenti Adı: {plugin.get('plugin_name', 'Bilinmeyen')}{reset_color}")
-                    if i == len(plugins_data) - 1:
-                        output.append(f"{yellow_wpcrawl}    Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
-                    else:
-                        output.append(f"{yellow_wpcrawl} |   Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
-                        output.append(f"{yellow_wpcrawl} |{reset_color}")
+        if wordpress_data.get('plugins'):
+            output.append(f"{yellow_wpcrawl}[+] Plugins.json içeriği:{reset_color}")
+            for i, plugin in enumerate(wordpress_data['plugins']):
+                output.append(f"{yellow_wpcrawl} └─ Eklenti Adı: {plugin.get('plugin_name', 'Bilinmeyen')}{reset_color}")
+                if i == len(wordpress_data['plugins']) - 1:
+                    output.append(f"{yellow_wpcrawl}    Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
+                else:
+                    output.append(f"{yellow_wpcrawl} |   Versiyon: {plugin.get('version', 'Bilinmeyen')}{reset_color}")
+                    output.append(f"{yellow_wpcrawl} |{reset_color}")
 
-        else:
-            output.append(f"{not_found}plugins.json dosyası bulunamadı.{reset_color}")
-
-        if status_codes_data:
+        if wordpress_data.get('status_codes'):
             output.append(f"{yellow_wpcrawl}\n[+] Eklenti Status Kodları:{reset_color}")
-            for file_dict in status_codes_data:
+            for file_dict in wordpress_data['status_codes']:
                 if file_dict['status_code'] == 200:
                     output.append(f"{yellow_wpcrawl} └─ {file_dict['url']} - Status kodu: {file_dict['status_code']}{reset_color}")
 
