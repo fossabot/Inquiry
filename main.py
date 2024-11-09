@@ -91,7 +91,6 @@ def main():
         print(f"{ascii_art} Hata oluştu: {e} {reset_color}")
 
 if __name__ == "__main__":
-    # Colorama'yı başlat
     init(autoreset=True)
     display_ascii_art()
     main()
