@@ -1,11 +1,11 @@
-# Inquiry v1.0 dnsCrawl
+# Inquiry v1.0 dnsCrawl 1.2
 # Signature: Yasin Yaşar
 
 import socket
 import concurrent.futures
 from typing import Dict, Any, List
 import dns.resolver
-from modules.color import not_found, reset_color, yellow_wpcrawl
+from lib.color import not_found, reset_color, yellow_wpcrawl
 
 class DNSChecker:
     def __init__(self, timeout: int = 3):
