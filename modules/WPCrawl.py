@@ -1,4 +1,4 @@
-# Inquiry v1.0 WPCrawl v1.5
+# Inquiry v1.0 WPCrawl v1.6
 # Signature: Yasin Yaşar
 
 import os
@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import threading
-from modules.color import not_found, reset_color, yellow_wpcrawl
+from lib.color import not_found, reset_color, yellow_wpcrawl
 
 def run_wordpress_crawl(targets):
     threads = [threading.Thread(target=crawl_worker, args=(target,)) for target in targets]
