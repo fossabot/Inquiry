@@ -8,7 +8,7 @@ from modules.dnsCrawl import DNSChecker
 import modules.WPCrawl as WPCrawl
 import modules.nmapDracula as nmapDracula
 import modules.subfinder as subfinder
-from modules.color import ascii_art, reset_color, yellow_wpcrawl
+from lib.color import ascii_art, reset_color, yellow_wpcrawl
 from colorama import init
 
 def process_domain_from_file(file_path):
@@ -16,7 +16,7 @@ def process_domain_from_file(file_path):
         return [line.strip() for line in file.readlines()]
 
 def display_ascii_art():
-    art_directory = os.path.join(os.path.dirname(__file__), "modules", "ascii-art")
+    art_directory = os.path.join(os.path.dirname(__file__), "lib", "ascii-art")
     
     try:
         # Get a list of all ASCII art files in the directory
@@ -91,6 +91,7 @@ def main():
         print(f"{ascii_art} Hata oluştu: {e} {reset_color}")
 
 if __name__ == "__main__":
+    # Colorama'yı başlat
     init(autoreset=True)
     display_ascii_art()
     main()
