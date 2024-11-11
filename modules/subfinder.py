@@ -1,10 +1,10 @@
-# Inquiry v1.0 subfinder v1.2
+# Inquiry v1.0 subfinder v1.3
 # Signature: Yasin Yaşar
 
 import requests
 import json
 import threading
-from modules.color import not_found, yellow_wpcrawl, reset_color
+from lib.color import not_found, yellow_wpcrawl, reset_color
 
 def fetch_subdomain_status(common_name, results):
     try:
