@@ -1,4 +1,4 @@
-# Inquiry v1.0 WPCrawl v1.6
+# Inquiry v1.1
 # Signature: Yasin Yaşar
 
 import os
