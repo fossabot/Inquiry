@@ -1,4 +1,4 @@
-# Inquiry v1.0 dnsCrawl 1.2
+# Inquiry v1.1
 # Signature: Yasin Yaşar
 
 import socket
