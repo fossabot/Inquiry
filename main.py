@@ -1,4 +1,4 @@
-# Inquiry v1.0
+# Inquiry v1.1
 # Signature: Yasin Yaşar
 
 import argparse
@@ -7,6 +7,7 @@ import random
 from modules.dnsCrawl import DNSChecker
 import modules.WPCrawl as WPCrawl
 import modules.nmapDracula as nmapDracula
+import modules.MoodleCrawl as MoodleCrawl
 import modules.subfinder as subfinder
 from lib.color import ascii_art, reset_color, yellow_wpcrawl
 from colorama import init
@@ -44,6 +45,7 @@ def main():
     parser.add_argument("--dns-records", dest="dns_records", action='store_true', help="Hedef hakkında DNS kayıtlarını alır.")
     parser.add_argument("--subfinder", dest="subfinder_domain", action='store_true', help="Hedef Subdomain tespiti yapar.")
     parser.add_argument("--wordpress-crawl", dest="wordpress_crawl", action='store_true', help="Hedef WordPress Pluginglerini bulur ve kayıt altına alır.")
+    parser.add_argument("--moodle-crawl", dest="moodle_crawl", action="store_true", help="Hedefin Moodle Version bilgilerini getirir.")
     parser.add_argument("--nmap-vulners", dest="nmap_vulners", action='store_true', help="Hedefe Nmap Vulners scripti kullanarak zafiyet testi yapar.")
     args = parser.parse_args()
 
@@ -80,7 +82,11 @@ def main():
             ### WPCRAWL ###
             if args.wordpress_crawl:
                 WPCrawl.run_wordpress_crawl([url])
-
+            
+            ### Moodle Crawl ###
+            if args.moodle_crawl:
+                MoodleCrawl.crawl(url)
+                
             ### NMAP VULNERS SCRIPT ###
             if args.nmap_vulners:
                 nmapDracula.run_nmap_vulners([url])
