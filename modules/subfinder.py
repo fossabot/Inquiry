@@ -1,4 +1,4 @@
-# Inquiry v1.0 subfinder v1.3
+# Inquiry v1.1
 # Signature: Yasin Yaşar
 
 import requests
