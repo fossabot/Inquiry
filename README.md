@@ -42,4 +42,4 @@ pip3 install -r requirements.txt
 
 - ## İletişim
 - Linkedin: https://www.linkedin.com/in/yasinyasarai/
-- İnstagram: https://www.instagram.com/yyasar.yasin/
+- Instagram: https://www.instagram.com/yyasar.yasin/
